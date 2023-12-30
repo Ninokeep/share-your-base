@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseType } from '../utils/enum/base-type.enum';
+import { UserEntity } from 'src/user/entity/user.entity';
 
 @Entity()
 export class BaseEntity {
@@ -33,6 +34,6 @@ export class BaseEntity {
   @Column({ enum: BaseType })
   type: string;
 
-  @Column()
-  creator: string;
+  @ManyToOne(() => UserEntity, (user) => user.bases, { nullable: false })
+  user: UserEntity;
 }
