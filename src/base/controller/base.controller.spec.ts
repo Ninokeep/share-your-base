@@ -3,7 +3,7 @@ import { BaseController } from './base.controller';
 import { BaseService } from '../service/base.service';
 import { BaseEntity } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { CreateBaseDto } from '../dto/create-base.dto';
+import { CreateBaseDto } from '../dto/post/create-base.dto';
 
 describe('BaseController', () => {
   let baseController: BaseController;
