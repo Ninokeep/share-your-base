@@ -26,13 +26,16 @@ export class BaseEntity {
   costStonePerHour: number;
 
   @Column()
-  costMetalWoodPerHour: number;
+  costMetalPerHour: number;
 
   @Column()
   costHQPerHour: number;
 
   @Column({ enum: BaseType })
   type: string;
+
+  @Column()
+  name: string;
 
   @ManyToOne(() => UserEntity, (user) => user.bases, { nullable: false })
   user: UserEntity;

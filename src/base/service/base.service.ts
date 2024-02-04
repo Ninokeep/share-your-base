@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBaseDto } from '../dto/post/create-base.dto';
 import { BaseEntity } from '../entity/base.entity';
+import { FindAllParams } from '../dto/query-params/find-all-params.dto';
 @Injectable()
 export class BaseService {
   constructor(
@@ -20,12 +21,13 @@ export class BaseService {
     }
   }
 
-  async findAll(): Promise<BaseEntity[]> {
+  async findAll(filter: FindAllParams): Promise<BaseEntity[]> {
     try {
       return this.baseRepository.find({
         relations: {
           user: true,
         },
+        where: filter,
       });
     } catch (e) {
       throw new InternalServerErrorException('Error save data in database');

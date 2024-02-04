@@ -1,8 +1,18 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  ValidationPipe,
+} from '@nestjs/common';
 import { CreateBaseDto } from '../dto/post/create-base.dto';
 import { BaseService } from '../service/base.service';
 import { BaseEntity } from '../entity/base.entity';
 import { UpdateBaseDto } from '../dto/put/put-base.dto';
+import { FindAllParams } from '../dto/query-params/find-all-params.dto';
 @Controller('bases')
 export class BaseController {
   constructor(private readonly baseService: BaseService) {}
@@ -13,8 +23,11 @@ export class BaseController {
   }
 
   @Get()
-  findAll(): Promise<BaseEntity[]> {
-    return this.baseService.findAll();
+  findAll(
+    @Query(new ValidationPipe({ transform: true, whitelist: true }))
+    params: FindAllParams,
+  ): Promise<BaseEntity[]> {
+    return this.baseService.findAll(params);
   }
 
   @Get(':id')

@@ -9,6 +9,11 @@ export class GetBaseDto {
 
   @ApiProperty()
   @IsNotEmpty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
   @IsNumber()
   costStone: number;
 
