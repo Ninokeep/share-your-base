@@ -70,4 +70,15 @@ export class BaseService {
 
     return { ...baseFind, ...base };
   }
+
+  async delete(id: number) {
+    const baseFound = await this.baseRepository.findBy({ id });
+    if (baseFound == null || !baseFound.length) {
+      throw new NotFoundException();
+    } else if (baseFound.length > 0) {
+      await this.baseRepository.delete(id);
+
+      return { detail: 'Item was been well removed' };
+    }
+  }
 }

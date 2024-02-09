@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -31,15 +33,20 @@ export class BaseController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<BaseEntity> {
-    return this.baseService.findOne(Number(id));
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<BaseEntity> {
+    return this.baseService.findOne(id);
   }
 
   @Put(':id')
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateBaseDto: UpdateBaseDto,
   ): Promise<BaseEntity> {
-    return this.baseService.update(Number(id), updateBaseDto);
+    return this.baseService.update(id, updateBaseDto);
+  }
+
+  @Delete(':id')
+  delete(@Param('id', ParseIntPipe) id: number): Promise<{ detail: string }> {
+    return this.baseService.delete(id);
   }
 }
