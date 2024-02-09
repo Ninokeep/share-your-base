@@ -1,9 +1,9 @@
 import { Test } from '@nestjs/testing';
 import { BaseController } from './base.controller';
 import { BaseService } from '../service/base.service';
-import { BaseEntity } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { CreateBaseDto } from '../dto/post/create-base.dto';
+import { BaseEntity } from '../entity/base.entity';
+import { UserEntity } from '../../user/entity/user.entity';
 
 describe('BaseController', () => {
   let baseController: BaseController;
@@ -13,10 +13,19 @@ describe('BaseController', () => {
     const moduleRef = await Test.createTestingModule({
       controllers: [BaseController],
       providers: [
-        BaseService,
+        {
+          provide: BaseService,
+          useValue: {
+            findAll: jest.fn,
+          },
+        },
         {
           provide: getRepositoryToken(BaseEntity),
           useClass: BaseEntity,
+        },
+        {
+          provide: getRepositoryToken(UserEntity),
+          useClass: UserEntity,
         },
       ],
     }).compile();
@@ -25,5 +34,5 @@ describe('BaseController', () => {
     baseController = moduleRef.get<BaseController>(BaseController);
   });
 
-  it('should run base controller test', () => {});
+  it('with wrong queries params', () => {});
 });

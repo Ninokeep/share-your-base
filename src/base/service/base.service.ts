@@ -1,9 +1,16 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBaseDto } from '../dto/post/create-base.dto';
 import { BaseEntity } from '../entity/base.entity';
 import { FindAllParams } from '../dto/query-params/find-all-params.dto';
+import { UpdateBaseDto } from '../dto/put/put-base.dto';
+
 @Injectable()
 export class BaseService {
   constructor(
@@ -44,5 +51,23 @@ export class BaseService {
     } catch (e) {
       throw new InternalServerErrorException('error in database');
     }
+  }
+
+  async update(id: number, base: UpdateBaseDto) {
+    const baseFind = await this.baseRepository.findOneBy({ id });
+
+    const invalidProps = Object.keys(base).filter(
+      (item) => !UpdateBaseDto.getPropertyNames().includes(item),
+    );
+
+    if (baseFind === null) {
+      throw new NotFoundException();
+    }
+    if (invalidProps.length > 0) {
+      throw new BadRequestException();
+    }
+    await this.baseRepository.update(id, base);
+
+    return { ...baseFind, ...base };
   }
 }

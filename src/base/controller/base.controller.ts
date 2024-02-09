@@ -36,5 +36,10 @@ export class BaseController {
   }
 
   @Put(':id')
-  update(@Body() updateBaseDto: UpdateBaseDto) {}
+  update(
+    @Param('id') id: string,
+    @Body() updateBaseDto: UpdateBaseDto,
+  ): Promise<BaseEntity> {
+    return this.baseService.update(Number(id), updateBaseDto);
+  }
 }

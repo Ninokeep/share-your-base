@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseType } from '../utils/enum/base-type.enum';
-import { UserEntity } from 'src/user/entity/user.entity';
+import { UserEntity } from '../../user/entity/user.entity';
 
 @Entity()
 export class BaseEntity {

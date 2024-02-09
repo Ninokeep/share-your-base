@@ -6,6 +6,7 @@ import {
   IsString,
   isNumber,
 } from 'class-validator';
+import { UserEntity } from 'src/user/entity/user.entity';
 
 export class CreateBaseDto {
   @ApiProperty()
@@ -56,8 +57,7 @@ export class CreateBaseDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsNumber()
-  user: string;
+  user: UserEntity;
 
   @ApiProperty()
   @IsNotEmpty()
