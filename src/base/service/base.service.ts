@@ -42,15 +42,13 @@ export class BaseService {
   }
 
   async findOne(id: number) {
-    try {
-      return this.baseRepository.findOne({
-        where: {
-          id: id,
-        },
-      });
-    } catch (e) {
-      throw new InternalServerErrorException('error in database');
-    }
+    const baseFound = await this.baseRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+    if (baseFound) return baseFound;
+    throw new NotFoundException();
   }
 
   async update(id: number, base: UpdateBaseDto) {

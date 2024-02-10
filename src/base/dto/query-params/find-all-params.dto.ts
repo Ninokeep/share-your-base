@@ -5,11 +5,6 @@ export class FindAllParams {
   @ApiProperty()
   @IsOptional()
   @IsNumber()
-  id?: number;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsNumber()
   costWood?: number;
 
   @ApiProperty()
