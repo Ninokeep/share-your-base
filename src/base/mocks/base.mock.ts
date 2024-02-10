@@ -1,0 +1,43 @@
+export const baseMockData = [
+  {
+    id: 11,
+    costWood: 500,
+    costStone: 450,
+    costMetal: 900,
+    costHQ: 20,
+    costWoodPerHour: 10,
+    costStonePerHour: 150,
+    costMetalPerHour: 2,
+    costHQPerHour: 500,
+    type: 'defensive',
+    name: 'trap base',
+    user: {
+      id: 1,
+      email: 'toto@gmail.com',
+      username: 'hyperion',
+      password: '1234',
+      draftBase: 1,
+    },
+  },
+
+  {
+    id: 22,
+    costWood: 500,
+    costStone: 450,
+    costMetal: 900,
+    costHQ: 20,
+    costWoodPerHour: 10,
+    costStonePerHour: 150,
+    costMetalPerHour: 2,
+    costHQPerHour: 500,
+    type: 'attack',
+    name: 'base raid',
+    user: {
+      id: 1,
+      email: 'toto@gmail.com',
+      username: 'hyperion',
+      password: '1234',
+      draftBase: 1,
+    },
+  },
+];

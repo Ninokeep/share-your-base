@@ -4,6 +4,8 @@ import { BaseService } from '../service/base.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { BaseEntity } from '../entity/base.entity';
 import { UserEntity } from '../../user/entity/user.entity';
+import { BaseServiceMock } from '../mocks/base.service.mock';
+import { baseMockData } from '../mocks/base.mock';
 
 describe('BaseController', () => {
   let baseController: BaseController;
@@ -15,9 +17,7 @@ describe('BaseController', () => {
       providers: [
         {
           provide: BaseService,
-          useValue: {
-            findAll: jest.fn,
-          },
+          useClass: BaseServiceMock,
         },
         {
           provide: getRepositoryToken(BaseEntity),
@@ -34,5 +34,17 @@ describe('BaseController', () => {
     baseController = moduleRef.get<BaseController>(BaseController);
   });
 
-  it('with wrong queries params', () => {});
+  it('show all bases 200 OK', async () => {
+    const responseData = await baseController.findAll();
+
+    expect(responseData).toEqual(baseMockData);
+  });
+
+  it('should get an array empty', async () => {
+    jest.spyOn(baseService, 'findAll').mockResolvedValue([]);
+
+    const responseData = await baseController.findAll();
+
+    expect(responseData).toEqual([]);
+  });
 });

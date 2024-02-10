@@ -15,6 +15,7 @@ import { BaseService } from '../service/base.service';
 import { BaseEntity } from '../entity/base.entity';
 import { UpdateBaseDto } from '../dto/put/put-base.dto';
 import { FindAllParams } from '../dto/query-params/find-all-params.dto';
+import { ApiOkResponse } from '@nestjs/swagger';
 @Controller('bases')
 export class BaseController {
   constructor(private readonly baseService: BaseService) {}
@@ -25,9 +26,10 @@ export class BaseController {
   }
 
   @Get()
+  @ApiOkResponse()
   findAll(
     @Query(new ValidationPipe({ transform: true, whitelist: true }))
-    params: FindAllParams,
+    params?: FindAllParams,
   ): Promise<BaseEntity[]> {
     return this.baseService.findAll(params);
   }

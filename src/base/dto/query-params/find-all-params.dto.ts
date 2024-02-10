@@ -1,7 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsIn, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsIn, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class FindAllParams {
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  id?: number;
+
   @ApiProperty()
   @IsOptional()
   @IsNumber()
