@@ -57,4 +57,9 @@ export class FindAllParams {
   @IsOptional()
   @IsNumber()
   userId?: number;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  rating?: number;
 }

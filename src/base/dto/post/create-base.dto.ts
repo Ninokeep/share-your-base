@@ -3,7 +3,10 @@ import {
   IsIn,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
+  Max,
+  Min,
   isNumber,
 } from 'class-validator';
 import { UserEntity } from '../../../user/entity/user.entity';
@@ -63,4 +66,11 @@ export class CreateBaseDto {
   @IsNotEmpty()
   @IsString()
   name: string;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsOptional()
+  @Min(0)
+  @Max(5)
+  rating: number = 0;
 }

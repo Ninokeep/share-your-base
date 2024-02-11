@@ -37,6 +37,9 @@ export class BaseEntity {
   @Column()
   name: string;
 
+  @Column({ default: 0 })
+  rating: number;
+
   @ManyToOne(() => UserEntity, (user) => user.bases, { nullable: false })
   user: UserEntity;
 }
