@@ -50,7 +50,6 @@ export class CreateBaseDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
-  @Type(() => Number)
   costHQPerHour: number;
 
   @ApiProperty()

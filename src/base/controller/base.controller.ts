@@ -28,7 +28,12 @@ export class BaseController {
   @Get()
   @ApiOkResponse()
   findAll(
-    @Query(new ValidationPipe({ transform: true, whitelist: true }))
+    @Query(
+      new ValidationPipe({
+        transform: true,
+        whitelist: true,
+      }),
+    )
     params?: FindAllParams,
   ): Promise<BaseEntity[]> {
     return this.baseService.findAll(params);

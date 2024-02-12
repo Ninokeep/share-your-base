@@ -10,7 +10,7 @@ import { CreateBaseDto } from '../dto/post/create-base.dto';
 import { BaseEntity } from '../entity/base.entity';
 import { FindAllParams } from '../dto/query-params/find-all-params.dto';
 import { UpdateBaseDto } from '../dto/put/put-base.dto';
-import { UserEntity } from 'src/user/entity/user.entity';
+import { UserEntity } from '../../user/entity/user.entity';
 import { UserNotFoundException } from '../../user/exceptions/user-not-found.exception';
 
 @Injectable()
@@ -34,7 +34,7 @@ export class BaseService {
     throw new UserNotFoundException();
   }
 
-  async findAll(filter: FindAllParams): Promise<BaseEntity[]> {
+  async findAll(filter?: FindAllParams): Promise<BaseEntity[]> {
     try {
       return this.baseRepository.find({
         relations: {
