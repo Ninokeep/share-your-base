@@ -7,9 +7,9 @@ import {
   IsString,
   Max,
   Min,
-  isNumber,
 } from 'class-validator';
 import { UserEntity } from '../../../user/entity/user.entity';
+import { Type } from 'class-transformer';
 
 export class CreateBaseDto {
   @ApiProperty()
@@ -50,6 +50,7 @@ export class CreateBaseDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
+  @Type(() => Number)
   costHQPerHour: number;
 
   @ApiProperty()
@@ -60,7 +61,8 @@ export class CreateBaseDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  user: UserEntity;
+  @IsNumber()
+  user: number;
 
   @ApiProperty()
   @IsNotEmpty()

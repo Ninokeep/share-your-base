@@ -10,22 +10,28 @@ import { CreateBaseDto } from '../dto/post/create-base.dto';
 import { BaseEntity } from '../entity/base.entity';
 import { FindAllParams } from '../dto/query-params/find-all-params.dto';
 import { UpdateBaseDto } from '../dto/put/put-base.dto';
+import { UserEntity } from 'src/user/entity/user.entity';
+import { UserNotFoundException } from '../../user/exceptions/user-not-found.exception';
 
 @Injectable()
 export class BaseService {
   constructor(
     @InjectRepository(BaseEntity)
     private baseRepository: Repository<BaseEntity>,
+    @InjectRepository(UserEntity)
+    private userRepository: Repository<UserEntity>,
   ) {}
 
   async createBase(baseDto: CreateBaseDto): Promise<BaseEntity> {
-    try {
-      const baseEntity = new BaseEntity();
-      Object.assign(baseEntity, baseDto);
-      return this.baseRepository.save(baseEntity);
-    } catch (e) {
-      throw new InternalServerErrorException('Error save data  in database');
-    }
+    const baseEntity = new BaseEntity();
+    Object.assign(baseEntity, baseDto);
+    const userFound = await this.userRepository.findOne({
+      where: { id: baseDto.user },
+    });
+
+    if (userFound) return this.baseRepository.save(baseEntity);
+
+    throw new UserNotFoundException();
   }
 
   async findAll(filter: FindAllParams): Promise<BaseEntity[]> {
