@@ -12,6 +12,7 @@ import { FindAllParams } from '../dto/query-params/find-all-params.dto';
 import { UpdateBaseDto } from '../dto/put/put-base.dto';
 import { UserEntity } from '../../user/entity/user.entity';
 import { UserNotFoundException } from '../../user/exceptions/user-not-found.exception';
+import { BaseNotFoundException } from '../exceptions/base-not-found.exception';
 
 @Injectable()
 export class BaseService {
@@ -61,7 +62,7 @@ export class BaseService {
     );
 
     if (baseFind === null) {
-      throw new NotFoundException();
+      throw new BaseNotFoundException();
     }
     if (invalidProps.length > 0) {
       throw new BadRequestException();
