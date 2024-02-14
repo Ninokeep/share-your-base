@@ -35,16 +35,12 @@ export class BaseService {
   }
 
   async findAll(filter?: FindAllParams): Promise<BaseEntity[]> {
-    try {
-      return this.baseRepository.find({
-        relations: {
-          user: true,
-        },
-        where: filter,
-      });
-    } catch (e) {
-      throw new InternalServerErrorException('Error save data in database');
-    }
+    return this.baseRepository.find({
+      relations: {
+        user: true,
+      },
+      where: filter,
+    });
   }
 
   async findOne(id: number) {

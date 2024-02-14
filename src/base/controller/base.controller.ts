@@ -32,6 +32,9 @@ export class BaseController {
       new ValidationPipe({
         transform: true,
         whitelist: true,
+        transformOptions: {
+          enableImplicitConversion: false,
+        },
       }),
     )
     params?: FindAllParams,

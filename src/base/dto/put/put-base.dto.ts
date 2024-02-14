@@ -69,6 +69,12 @@ export class UpdateBaseDto {
   @IsOptional()
   name: string;
 
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  @IsOptional()
+  rating: number;
+
   static getPropertyNames(): string[] {
     return [
       'costWood',
@@ -81,6 +87,7 @@ export class UpdateBaseDto {
       'costHQPerHour',
       'type',
       'name',
+      'rating',
     ];
   }
 }
