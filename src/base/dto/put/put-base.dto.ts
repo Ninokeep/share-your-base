@@ -5,6 +5,8 @@ import {
   IsString,
   IsIn,
   IsOptional,
+  Max,
+  Min,
 } from 'class-validator';
 
 export class UpdateBaseDto {
@@ -73,6 +75,8 @@ export class UpdateBaseDto {
   @IsNotEmpty()
   @IsNumber()
   @IsOptional()
+  @Max(5)
+  @Min(0)
   rating: number;
 
   static getPropertyNames(): string[] {
