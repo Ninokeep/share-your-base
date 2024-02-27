@@ -15,7 +15,7 @@ export class UserEntity {
   @Column()
   password: string;
 
-  @Column()
+  @Column({ default: 1 })
   draftBase: number;
 
   @OneToMany(() => BaseEntity, (base) => base.user)
