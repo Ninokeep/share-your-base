@@ -7,6 +7,9 @@ import { RegisterDto } from '../dto/register.dto';
 import { UserAlreadyExistException } from '../exceptions/user-already-exist.exception';
 import { hashPassword } from 'src/utils/hash-password';
 import { NotSamePasswordException } from '../exceptions/not-same-password.exception';
+import * as bcrypt from 'bcrypt';
+import { UserNotFoundException } from 'src/user/exceptions/user-not-found.exception';
+import { WrongPasswordException } from '../exceptions/wrong-password.exception';
 
 @Injectable()
 export class AuthService {
@@ -16,12 +19,18 @@ export class AuthService {
   ) {}
 
   async login(loginDto: LoginDto) {
-    this.userRepository.find({
-      where: {
-        email: loginDto.email,
-        password: loginDto.password,
-      },
+    const user = await this.userRepository.findOneBy({
+      email: loginDto.email,
     });
+
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+    const isMatch = await bcrypt.compare(loginDto.password, user.password);
+    if (!isMatch) {
+      throw new WrongPasswordException();
+    }
+    return { message: 'user found' };
   }
 
   async register(registerDto: RegisterDto) {
