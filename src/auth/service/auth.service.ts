@@ -10,27 +10,30 @@ import { NotSamePasswordException } from '../exceptions/not-same-password.except
 import * as bcrypt from 'bcrypt';
 import { UserNotFoundException } from 'src/user/exceptions/user-not-found.exception';
 import { WrongPasswordException } from '../exceptions/wrong-password.exception';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
+    private jwtService: JwtService,
   ) {}
 
   async login(loginDto: LoginDto) {
-    const user = await this.userRepository.findOneBy({
-      email: loginDto.email,
-    });
+    const user = await this.findUserByEmail(
+      this.userRepository,
+      loginDto.email,
+    );
 
-    if (!user) {
-      throw new UserNotFoundException();
-    }
-    const isMatch = await bcrypt.compare(loginDto.password, user.password);
-    if (!isMatch) {
-      throw new WrongPasswordException();
-    }
-    return { message: 'user found' };
+    await this.checkSamePassword(loginDto.password, user.password);
+
+    return {
+      access_token: await this.jwtService.signAsync({
+        email: user.email,
+        id: user.id,
+      }),
+    };
   }
 
   async register(registerDto: RegisterDto) {
@@ -52,5 +55,28 @@ export class AuthService {
     await this.userRepository.save(newUser);
 
     return { message: 'User created !' };
+  }
+
+  private async findUserByEmail(
+    userRepository: Repository<UserEntity>,
+    email: string,
+  ): Promise<UserEntity> {
+    const user = await userRepository.findOneBy({ email });
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+
+    return user;
+  }
+
+  private async checkSamePassword(
+    password: string,
+    hash: string,
+  ): Promise<void> {
+    const isMatch = await bcrypt.compare(password, hash);
+
+    if (!isMatch) {
+      throw new WrongPasswordException();
+    }
   }
 }
