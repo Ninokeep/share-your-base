@@ -7,11 +7,15 @@ import { BaseEntity } from './base/entity/base.entity';
 import { UserEntity } from './user/entity/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { SubscriptionModule } from './subscription/subscription.module';
+import { Usermodule } from './user/user.module';
 
 @Module({
   imports: [
     BaseModule,
     AuthModule,
+    SubscriptionModule,
+    Usermodule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',

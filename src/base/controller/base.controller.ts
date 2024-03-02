@@ -8,6 +8,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { CreateBaseDto } from '../dto/post/create-base.dto';
@@ -16,6 +17,7 @@ import { BaseEntity } from '../entity/base.entity';
 import { UpdateBaseDto } from '../dto/put/put-base.dto';
 import { FindAllParams } from '../dto/query-params/find-all-params.dto';
 import { ApiOkResponse } from '@nestjs/swagger';
+import { AuthGuard } from 'src/auth/guard/auth.guard';
 @Controller('bases')
 export class BaseController {
   constructor(private readonly baseService: BaseService) {}
@@ -43,6 +45,7 @@ export class BaseController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard)
   findOne(@Param('id', ParseIntPipe) id: number): Promise<BaseEntity> {
     return this.baseService.findOne(id);
   }
