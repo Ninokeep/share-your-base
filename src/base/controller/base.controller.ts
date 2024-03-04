@@ -17,7 +17,7 @@ import { BaseEntity } from '../entity/base.entity';
 import { UpdateBaseDto } from '../dto/put/put-base.dto';
 import { FindAllParams } from '../dto/query-params/find-all-params.dto';
 import { ApiOkResponse } from '@nestjs/swagger';
-import { AuthGuard } from 'src/auth/guard/auth.guard';
+import { AuthGuard } from '../../auth/guard/auth.guard';
 @Controller('bases')
 export class BaseController {
   constructor(private readonly baseService: BaseService) {}

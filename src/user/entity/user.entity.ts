@@ -22,6 +22,9 @@ export class UserEntity {
   @Column({ default: 'user', enum: UserRole })
   role: string;
 
+  @Column({ default: false, enum: [false, true] })
+  disabled: boolean;
+
   @OneToMany(() => BaseEntity, (base) => base.user)
   bases: BaseEntity[];
 }

@@ -7,9 +7,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../entity/user.entity';
 import { FindAllParamsDto } from '../dto/find-all-params.dto';
-import { UpdateBaseDto } from 'src/base/dto/put/put-base.dto';
 import { UserNotFoundException } from '../exceptions/user-not-found.exception';
 import { UserUpdateDto } from '../dto/update-user.dto';
+import { UserIsAlreadyDisabledException } from '../exceptions/user-is-already-disabled.exception';
 
 @Injectable()
 export class UserService {
@@ -40,18 +40,36 @@ export class UserService {
   async update(id: number, updateUserDto: UserUpdateDto) {
     const userFind = await this.userRepository.findOneBy({ id });
 
-    const invalidProps = Object.keys(updateUserDto).filter(
-      (item) => !UpdateBaseDto.getPropertyNames().includes(item),
-    );
-
     if (userFind === null) {
       throw new UserNotFoundException();
     }
+
+    const invalidProps = Object.keys(updateUserDto).filter(
+      (item) => !UserUpdateDto.getPropertyNames().includes(item),
+    );
+
     if (invalidProps.length > 0) {
       throw new BadRequestException();
     }
     await this.userRepository.update(id, updateUserDto);
 
     return { ...userFind, ...updateUserDto };
+  }
+
+  async remove(id: number) {
+    const userFind = await this.userRepository.findOneBy({
+      id,
+    });
+
+    if (userFind === null) {
+      throw new UserNotFoundException();
+    }
+
+    if (userFind.disabled) {
+      throw new UserIsAlreadyDisabledException();
+    }
+    await this.userRepository.update(userFind.id, { disabled: true });
+
+    return { detail: 'Account disabled' };
   }
 }

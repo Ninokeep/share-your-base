@@ -6,6 +6,9 @@ import { BaseEntity } from '../entity/base.entity';
 import { UserEntity } from '../../user/entity/user.entity';
 import { BaseServiceMock } from '../mocks/base.service.mock';
 import { baseMockData } from '../mocks/base.mock';
+import { AuthGuard } from '../../auth/guard/auth.guard';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 describe('BaseController', () => {
   let baseController: BaseController;
@@ -19,6 +22,15 @@ describe('BaseController', () => {
           provide: BaseService,
           useClass: BaseServiceMock,
         },
+        {
+          provide: JwtService,
+          useClass: JwtService,
+        },
+        {
+          provide: ConfigService,
+          useClass: ConfigService,
+        },
+        { provide: AuthGuard, useClass: AuthGuard },
         {
           provide: getRepositoryToken(BaseEntity),
           useClass: BaseEntity,
