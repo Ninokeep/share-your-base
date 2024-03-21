@@ -18,6 +18,8 @@ import { UpdateBaseDto } from '../dto/put/put-base.dto';
 import { FindAllParams } from '../dto/query-params/find-all-params.dto';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { AuthGuard } from '../../auth/guard/auth.guard';
+import { PageDto } from 'src/commons/dtos/page.dto';
+import { PageOptionDto } from 'src/commons/dtos/page-option.dto';
 @Controller('bases')
 export class BaseController {
   constructor(private readonly baseService: BaseService) {}
@@ -30,6 +32,7 @@ export class BaseController {
   @Get()
   @ApiOkResponse()
   findAll(
+    @Query() PageOptionDto: PageOptionDto,
     @Query(
       new ValidationPipe({
         transform: true,
@@ -40,8 +43,8 @@ export class BaseController {
       }),
     )
     params?: FindAllParams,
-  ): Promise<BaseEntity[]> {
-    return this.baseService.findAll(params);
+  ): Promise<PageDto<BaseEntity>> {
+    return this.baseService.findAll(PageOptionDto, params);
   }
 
   @Get(':id')
