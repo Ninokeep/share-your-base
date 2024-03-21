@@ -7,6 +7,7 @@ import {
   isNotEmpty,
   isString,
 } from 'class-validator';
+import { TrimWhiteSpace } from 'src/decorators/trim-white-space.decorator';
 
 export class RegisterDto {
   @IsEmail()
@@ -16,6 +17,7 @@ export class RegisterDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(8)
+  @TrimWhiteSpace()
   password: string;
 
   @IsString()

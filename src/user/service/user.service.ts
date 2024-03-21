@@ -10,6 +10,7 @@ import { FindAllParamsDto } from '../dto/find-all-params.dto';
 import { UserNotFoundException } from '../exceptions/user-not-found.exception';
 import { UserUpdateDto } from '../dto/update-user.dto';
 import { UserIsAlreadyDisabledException } from '../exceptions/user-is-already-disabled.exception';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {

@@ -5,7 +5,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { API_PREFIX, API_PREFIX_VERSION } from './config/utils';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   app.setGlobalPrefix(`${API_PREFIX}/${API_PREFIX_VERSION}`);
   app.useGlobalPipes(
     new ValidationPipe({
@@ -24,7 +24,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-
-  await app.listen(3000);
+  await app.listen(8888);
 }
 bootstrap();

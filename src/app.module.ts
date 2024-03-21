@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { Usermodule } from './user/user.module';
+import configuration from './config/configuration';
 
 @Module({
   imports: [
