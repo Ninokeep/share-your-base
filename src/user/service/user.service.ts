@@ -11,12 +11,14 @@ import { UserNotFoundException } from '../exceptions/user-not-found.exception';
 import { UserUpdateDto } from '../dto/update-user.dto';
 import { UserIsAlreadyDisabledException } from '../exceptions/user-is-already-disabled.exception';
 import { JwtService } from '@nestjs/jwt';
+import { UserCredentials } from '../../utils/interfaces/user-credentials';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    private readonly jwtService: JwtService,
   ) {}
 
   async findAll(filter?: FindAllParamsDto): Promise<UserEntity[]> {
@@ -35,6 +37,23 @@ export class UserService {
       },
     });
     if (user) return user;
+    throw new NotFoundException();
+  }
+
+  async getUserCrendetialsByToken(token: string): Promise<UserEntity> {
+    const resultOfToken = this.jwtService.decode<UserCredentials>(token);
+    if (!resultOfToken) {
+      throw new BadRequestException();
+    }
+    const user = await this.userRepository.findOne({
+      where: {
+        id: resultOfToken.id,
+      },
+    });
+    if (user) {
+      delete user.password;
+      return user;
+    }
     throw new NotFoundException();
   }
 

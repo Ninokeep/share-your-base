@@ -11,6 +11,7 @@ import * as bcrypt from 'bcrypt';
 import { UserNotFoundException } from 'src/user/exceptions/user-not-found.exception';
 import { WrongPasswordException } from '../exceptions/wrong-password.exception';
 import { JwtService } from '@nestjs/jwt';
+import { UserCredentialsDto } from '../dto/user-credentials.dto';
 
 @Injectable()
 export class AuthService {
@@ -38,6 +39,10 @@ export class AuthService {
         username: user.username,
       }),
     };
+  }
+
+  async getUserInformations(userCredentialsDto: UserCredentialsDto) {
+    return {};
   }
 
   async register(registerDto: RegisterDto) {
