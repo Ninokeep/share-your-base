@@ -76,9 +76,15 @@ export class BaseService {
     if (baseFind === null) {
       throw new BaseNotFoundException();
     }
+    //check bad property in the request
     if (invalidProps.length > 0) {
       throw new BadRequestException();
     }
+
+    if (!Object.keys(base).length) {
+      throw new BadRequestException();
+    }
+
     await this.baseRepository.update(id, base);
 
     return { ...baseFind, ...base };
