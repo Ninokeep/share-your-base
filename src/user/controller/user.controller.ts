@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -47,7 +48,7 @@ export class UserController {
   @Put(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
-    userUpdateDto: UserUpdateDto,
+    @Body() userUpdateDto: UserUpdateDto,
   ): Promise<UserEntity> {
     return this.userService.update(id, userUpdateDto);
   }

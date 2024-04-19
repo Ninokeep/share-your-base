@@ -12,6 +12,7 @@ import { UserUpdateDto } from '../dto/update-user.dto';
 import { UserIsAlreadyDisabledException } from '../exceptions/user-is-already-disabled.exception';
 import { JwtService } from '@nestjs/jwt';
 import { UserCredentials } from '../../utils/interfaces/user-credentials';
+import { hashPassword } from 'src/utils/hash-password';
 
 @Injectable()
 export class UserService {
@@ -63,6 +64,9 @@ export class UserService {
     if (userFind === null) {
       throw new UserNotFoundException();
     }
+    if (updateUserDto === undefined) {
+      throw new BadRequestException();
+    }
 
     const invalidProps = Object.keys(updateUserDto).filter(
       (item) => !UserUpdateDto.getPropertyNames().includes(item),
@@ -71,6 +75,7 @@ export class UserService {
     if (invalidProps.length > 0) {
       throw new BadRequestException();
     }
+    updateUserDto.password = await hashPassword(updateUserDto.password);
     await this.userRepository.update(id, updateUserDto);
 
     return { ...userFind, ...updateUserDto };

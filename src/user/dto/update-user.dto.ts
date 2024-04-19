@@ -1,12 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform, TransformFnParams } from 'class-transformer';
 import {
   IsEmail,
   IsIn,
-  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
+  IsStrongPassword,
+  Matches,
+  MinLength,
+  NotContains,
 } from 'class-validator';
+import { TrimWhiteSpace } from '../../decorators/trim-white-space.decorator';
 
 export class UserUpdateDto {
   @IsString()
@@ -22,6 +27,14 @@ export class UserUpdateDto {
   @IsString()
   @IsOptional()
   @ApiProperty()
+  @TrimWhiteSpace()
+  @IsStrongPassword({
+    minLength: 8,
+    minLowercase: 1,
+    minUppercase: 1,
+    minNumbers: 1,
+    minSymbols: 1,
+  })
   password?: string;
 
   @IsNumber()

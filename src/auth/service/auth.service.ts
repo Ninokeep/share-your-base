@@ -70,7 +70,7 @@ export class AuthService {
     userRepository: Repository<UserEntity>,
     email: string,
   ): Promise<UserEntity> {
-    const user = await userRepository.findOneBy({ email });
+    const user = await userRepository.findOneBy({ email, disabled: false });
     if (!user) {
       throw new UserNotFoundException();
     }
