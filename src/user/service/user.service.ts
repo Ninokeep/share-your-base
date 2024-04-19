@@ -75,7 +75,10 @@ export class UserService {
     if (invalidProps.length > 0) {
       throw new BadRequestException();
     }
-    updateUserDto.password = await hashPassword(updateUserDto.password);
+
+    if (updateUserDto.password) {
+      updateUserDto.password = await hashPassword(updateUserDto.password);
+    }
     await this.userRepository.update(id, updateUserDto);
 
     return { ...userFind, ...updateUserDto };
