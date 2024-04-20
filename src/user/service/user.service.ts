@@ -60,7 +60,6 @@ export class UserService {
 
   async update(id: number, updateUserDto: UserUpdateDto) {
     const userFind = await this.userRepository.findOneBy({ id });
-
     if (userFind === null) {
       throw new UserNotFoundException();
     }
@@ -75,12 +74,10 @@ export class UserService {
     if (invalidProps.length > 0) {
       throw new BadRequestException();
     }
-
-    if (updateUserDto.password) {
+    if (updateUserDto.password !== undefined) {
       updateUserDto.password = await hashPassword(updateUserDto.password);
     }
     await this.userRepository.update(id, updateUserDto);
-
     return { ...userFind, ...updateUserDto };
   }
 

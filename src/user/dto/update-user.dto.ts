@@ -10,6 +10,8 @@ import {
   Matches,
   MinLength,
   NotContains,
+  NotEquals,
+  ValidateIf,
 } from 'class-validator';
 import { TrimWhiteSpace } from '../../decorators/trim-white-space.decorator';
 
@@ -25,8 +27,9 @@ export class UserUpdateDto {
   email?: string;
 
   @IsString()
-  @IsOptional()
+  @NotEquals(null)
   @ApiProperty()
+  @ValidateIf((obj, value) => value !== undefined)
   @TrimWhiteSpace()
   @IsStrongPassword({
     minLength: 8,
