@@ -1,6 +1,7 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/user/entity/user.entity';
+import { UserEntity } from '../../user/entity/user.entity';
+import { BaseEntity } from '../../base/entity/base.entity';
 import { Repository } from 'typeorm';
 import { LoginDto } from '../dto/login.dto';
 import { RegisterDto } from '../dto/register.dto';
@@ -19,24 +20,39 @@ export class AuthService {
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
     private jwtService: JwtService,
+    @InjectRepository(BaseEntity)
+    private baseRepository: Repository<BaseEntity>,
   ) {}
 
   async login(loginDto: LoginDto) {
-    const user = await this.findUserByEmail(
-      this.userRepository,
-      loginDto.email,
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .innerJoinAndSelect('user.bases', 'base', 'user.disabled = :isDisabled', {
+        isDisabled: false,
+      })
+      .where('user.email = :email', { email: loginDto.email })
+      .getMany();
+
+    if (!user.length) {
+      throw new UserNotFoundException();
+    }
+    const isSamePassword = await this.checkSamePassword(
+      loginDto.password,
+      user[0].password,
     );
 
-    await this.checkSamePassword(loginDto.password, user.password);
+    if (!isSamePassword) {
+      throw new WrongPasswordException();
+    }
 
     return {
       access_token: await this.jwtService.signAsync({
-        email: user.email,
-        id: user.id,
-        draftBase: user.draftBase,
-        disabled: user.disabled,
-        role: user.role,
-        username: user.username,
+        email: user[0].email,
+        id: user[0].id,
+        draftBase: user[0].draftBase,
+        disabled: user[0].disabled,
+        role: user[0].role,
+        username: user[0].username,
       }),
     };
   }
@@ -81,11 +97,13 @@ export class AuthService {
   private async checkSamePassword(
     password: string,
     hash: string,
-  ): Promise<void> {
+  ): Promise<boolean> {
     const isMatch = await bcrypt.compare(password, hash);
 
     if (!isMatch) {
-      throw new WrongPasswordException();
+      return false;
     }
+
+    return true;
   }
 }

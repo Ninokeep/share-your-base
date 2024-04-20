@@ -1,5 +1,11 @@
 import { BaseEntity } from '../../base/entity/base.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 import { UserRole } from '../model/user-role.enum';
 
 @Entity()
@@ -7,7 +13,7 @@ export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
@@ -25,6 +31,6 @@ export class UserEntity {
   @Column({ default: false, enum: [false, true] })
   disabled: boolean;
 
-  @OneToMany(() => BaseEntity, (base) => base.user)
+  @OneToMany(() => BaseEntity, (base) => base.users)
   bases: BaseEntity[];
 }

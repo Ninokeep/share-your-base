@@ -5,13 +5,14 @@ import { AuthService } from './service/auth.service';
 import { AuthController } from './controller/auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { BaseEntity } from '../base/entity/base.entity';
 
 @Module({
   providers: [AuthService],
   exports: [AuthService],
   controllers: [AuthController],
   imports: [
-    TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([UserEntity, BaseEntity]),
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => ({
         global: true,

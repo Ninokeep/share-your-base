@@ -41,5 +41,5 @@ export class BaseEntity {
   rating: number;
 
   @ManyToOne(() => UserEntity, (user) => user.bases, { nullable: false })
-  user: UserEntity;
+  users: UserEntity;
 }
