@@ -25,20 +25,14 @@ export class AuthService {
   ) {}
 
   async login(loginDto: LoginDto) {
-    const user = await this.userRepository
-      .createQueryBuilder('user')
-      .innerJoinAndSelect('user.bases', 'base', 'user.disabled = :isDisabled', {
-        isDisabled: false,
-      })
-      .where('user.email = :email', { email: loginDto.email })
-      .getMany();
+    const user = await this.findUserByEmail(
+      this.userRepository,
+      loginDto.email,
+    );
 
-    if (!user.length) {
-      throw new UserNotFoundException();
-    }
     const isSamePassword = await this.checkSamePassword(
       loginDto.password,
-      user[0].password,
+      user.password,
     );
 
     if (!isSamePassword) {
@@ -47,12 +41,12 @@ export class AuthService {
 
     return {
       access_token: await this.jwtService.signAsync({
-        email: user[0].email,
-        id: user[0].id,
-        draftBase: user[0].draftBase,
-        disabled: user[0].disabled,
-        role: user[0].role,
-        username: user[0].username,
+        email: user.email,
+        id: user.id,
+        draftBase: user.draftBase,
+        disabled: user.disabled,
+        role: user.role,
+        username: user.username,
       }),
     };
   }
