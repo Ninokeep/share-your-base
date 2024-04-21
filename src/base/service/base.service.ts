@@ -66,6 +66,18 @@ export class BaseService {
     throw new NotFoundException();
   }
 
+  async findBasesByUserId(id: number) {
+    const bases = await this.userRepository
+      .createQueryBuilder('user')
+      .innerJoinAndSelect('user.bases', 'base', 'user.id = :id', { id })
+      .getMany(); // use many is easiest to check if the user contains base or not
+
+    if (bases.length > 0) {
+      bases[0]['numberOfBases'] = bases[0].bases.length;
+    }
+    return bases;
+  }
+
   async update(id: number, base: UpdateBaseDto) {
     const baseFind = await this.baseRepository.findOneBy({ id });
 

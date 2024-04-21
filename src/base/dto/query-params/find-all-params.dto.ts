@@ -68,7 +68,7 @@ export class FindAllParams {
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
-  userId?: number;
+  users?: number;
 
   @ApiProperty()
   @IsOptional()

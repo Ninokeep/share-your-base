@@ -20,6 +20,7 @@ import { ApiOkResponse } from '@nestjs/swagger';
 import { AuthGuard } from '../../auth/guard/auth.guard';
 import { PageDto } from 'src/commons/dtos/page.dto';
 import { PageOptionDto } from 'src/commons/dtos/page-option.dto';
+import { UserEntity } from 'src/user/entity/user.entity';
 @Controller('bases')
 export class BaseController {
   constructor(private readonly baseService: BaseService) {}
@@ -64,5 +65,10 @@ export class BaseController {
   @Delete(':id')
   delete(@Param('id', ParseIntPipe) id: number): Promise<{ detail: string }> {
     return this.baseService.delete(id);
+  }
+
+  @Get('/users/:id')
+  findAllBasesByIdUser(@Param('id', ParseIntPipe) id: number): Promise<any> {
+    return this.baseService.findBasesByUserId(id);
   }
 }
